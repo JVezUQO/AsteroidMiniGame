@@ -1,0 +1,20 @@
+Game Title: Gravity Shift
+
+Game Overview: Gravity Shift is a 2D platformer game where the player controls a character that can switch the direction of gravity. The goal of the game is to navigate through various levels while using the gravity-shifting mechanic to avoid obstacles and enemies.
+
+Game Mechanics: The main mechanic of the game is the ability to shift the direction of gravity. The player can switch the direction of gravity at will, allowing them to walk on walls and ceilings, avoid obstacles, and navigate through the levels. The player can only shift gravity in one of four directions: up, down, left, and right.
+
+The game also includes some basic platformer mechanics such as jumping and running. The player can jump higher or further depending on how long they hold down the jump button. Additionally, the player can run by holding down a dedicated button, allowing them to move faster and jump further.
+
+Level Design: The levels in Gravity Shift are designed to take advantage of the gravity-shifting mechanic. The player must navigate through obstacles such as spikes, moving platforms, and enemies while using the gravity-shifting mechanic to stay alive. The levels also include collectibles such as coins and power-ups that the player can collect to increase their score or gain special abilities.
+
+Art Style: Gravity Shift features a simple, colorful art style with cartoonish characters and environments. The game uses a limited color palette to create a cohesive look and feel.
+
+Target Platform: Gravity Shift is designed to be played on desktop or mobile devices using a keyboard or touchscreen controls.
+
+Coding Challenges: There are a few coding challenges that would need to be addressed when creating Gravity Shift. These include implementing the gravity-shifting mechanic, designing levels that take advantage of the mechanic, and creating smooth and responsive controls for the player character.
+
+Overall, Gravity Shift is a simple but fun game that features a unique mechanic that could be a great project for someone to code. With its colorful art style and challenging gameplay, it has the potential to be a hit with players of all ages.
+
+https://pixijs.io/examples/#/demos-basic/container.js
+https://github.com/kittykatattack/learningPixi
