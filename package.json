@@ -1,0 +1,23 @@
+{
+  "name": "gravityshiftgame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JVezUQO/GravityShiftGame.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JVezUQO/GravityShiftGame/issues"
+  },
+  "homepage": "https://github.com/JVezUQO/GravityShiftGame#readme",
+  "dependencies": {
+    "pixi.js": "^7.2.4"
+  }
+}

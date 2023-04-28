@@ -17,7 +17,4 @@ if(clavier.key == "ArrowRight"){
     //alert("ArrowDown")
     moveRight()
 }
-if (clavier.key == "Enter"){
-    addDummy();
-}
 })
