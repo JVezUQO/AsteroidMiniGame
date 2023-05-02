@@ -7,6 +7,7 @@ let rotation = 0
 let movX = 0
 let movY = 0
 let tickCount = 0
+let ast
 const ticker = new PIXI.Ticker();
 ticker.add(update)
 ticker.start();
@@ -17,20 +18,28 @@ app.stage.addChild(sprite_test);
 sprite_test.position.x = coordx
 sprite_test.position.y = coordy
 
-// Main program
+
+// Main program //
 
 function update(delta) {
-console.log(rotation, movX, movY, tickCount)
+//console.log(rotation, movX, movY, tickCount)
+app.renderer.render(app.stage)
 sprite_test.x += movX 
 sprite_test.y += movY
 sprite_test.rotation += rotation
 
 OOB() ; //SL();
 tickCount += 1;
+//moveAsteroid()
 if (tickCount >= 500){
-    summonAsteroid();
+    const ast_test = PIXI.Sprite.from("assets/ressources/test.png")
+    console.log("Beep")
+    app.stage.addChild(ast_test)
+
     tickCount = 0;
 }
+
+
 }
 
 
@@ -88,18 +97,15 @@ function SL(){ // Speed Limiter ...not wokring
     }
 }
 
-function summonAsteroid(){ //Summon a basic test asteroid
-    const rock = PIXI.Sprite.from("assets/ressources/test.png")
-    rock.pivot.x =16;
-    rock.pivot.y =16;
-    rock.position.x = Math.random()*511+1
-    rock.position.y = Math.random()*511+1
-    rock.rotation = Math.random()-0.5
-    app.stage.addChild(rock)
+function moveAsteroid(){
+    try{rock.rotation += 1.2;}
+    catch{
+        summonAsteroid()
+    }
+    
 }
-
-function moveAsteroid(){}
 
 function collisionCheck(){}
 
 function fireBeam(){}
+
