@@ -1,16 +1,30 @@
-//Create a Pixi Application
+// --- SETUP --- //
 
-const app = new PIXI.Application({width: 512, height: 512});
-let coordx = 128
-let coordy = 128
+//Create a Pixi Application
+let screenX = 764
+let screenY = 512
+const app = new PIXI.Application({width: screenX, height: screenY});
+
+//Var for player
+let coordx = screenX/2
+let coordy = screenY/2
 let rotation = 0
 let movX = 0
 let movY = 0
+
+//Var for asteroids
+let asteroidList = []
+
+//Var for fire projectile
+let fire
+let fireList = []
+
+//Var for ticker
 let tickCount = 0
-let ast
 const ticker = new PIXI.Ticker();
 ticker.add(update)
 ticker.start();
+
 //Add the canvas that Pixi automatically created for you to the HTML document and create and append a test unit name sprite_test
 document.body.appendChild(app.view);
 const sprite_test = PIXI.Sprite.from("assets/ressources/player.png")
@@ -19,7 +33,7 @@ sprite_test.position.x = coordx
 sprite_test.position.y = coordy
 
 
-// Main program //
+// --- Main program --- //
 
 function update(delta) {
 //console.log(rotation, movX, movY, tickCount)
@@ -28,18 +42,35 @@ sprite_test.x += movX
 sprite_test.y += movY
 sprite_test.rotation += rotation
 
-OOB() ; //SL();
+OOB() ; 
 tickCount += 1;
-//moveAsteroid()
-if (tickCount >= 500){
-    const ast_test = PIXI.Sprite.from("assets/ressources/test.png")
-    console.log("Beep")
-    app.stage.addChild(ast_test)
+if (tickCount >= 100 && asteroidList.length < 5){
+    addAsteroid();
 
     tickCount = 0;
 }
 
+for(let i = 0; i<asteroidList.length ; i++){
+    const selectAsteroid = asteroidList[i]
+    selectAsteroid.x += selectAsteroid.speed*Math.sin(selectAsteroid.direction)
+    selectAsteroid.y += selectAsteroid.speed*Math.cos(selectAsteroid.direction)
+    selectAsteroid.rotation += 0.01 + selectAsteroid.spin
 
+    if(selectAsteroid.x >= screenX+1){
+        selectAsteroid.x = 0        
+    }
+    if(selectAsteroid.y >= screenY+1){
+        selectAsteroid.y = 0        
+    }
+    if(selectAsteroid.x <= -1){
+        selectAsteroid.x = screenX        
+    }
+    if(selectAsteroid.y <= -1){
+        selectAsteroid.y = screenY       
+    }
+
+}
+//console.log(asteroidList)
 }
 
 
@@ -58,26 +89,24 @@ function moveDown(){
 
 function moveLeft(){
     rotation -= 0.005;
-//    rotation = sprite_test.rotation
 }
 
 function moveRight(){
     rotation += 0.005;
-//    rotation = sprite_test.rotation
 }
 
 function OOB(){ //Out of Bound
-    if(sprite_test.position.x >= 513){
+    if(sprite_test.position.x >= screenX+1){
         sprite_test.position.x = 0        
     }
-    if(sprite_test.position.y >= 512){
+    if(sprite_test.position.y >= screenY+1){
         sprite_test.position.y = 0        
     }
     if(sprite_test.position.x <= -1){
-        sprite_test.position.x = 512        
+        sprite_test.position.x = screenX        
     }
     if(sprite_test.position.y <= -1){
-        sprite_test.position.y = 512       
+        sprite_test.position.y = screenY       
     }
 }
 
@@ -97,15 +126,18 @@ function SL(){ // Speed Limiter ...not wokring
     }
 }
 
-function moveAsteroid(){
-    try{rock.rotation += 1.2;}
-    catch{
-        summonAsteroid()
-    }
-    
-}
-
 function collisionCheck(){}
 
 function fireBeam(){}
 
+function addAsteroid(){
+    const rock = PIXI.Sprite.from("assets/ressources/test.png")
+    rock.anchor.set(0.5)
+    rock.x = Math.random() * screenX
+    rock.y = Math.random() * screenY
+    rock.direction = Math.random() * Math.PI * 2
+    rock.spin = (Math.random()-0.5)/10
+    rock.speed = 0.5
+    asteroidList.push(rock)
+    app.stage.addChild(rock)
+}
