@@ -42,9 +42,20 @@ sprite_test.x += movX
 sprite_test.y += movY
 sprite_test.rotation += rotation
 
-OOB() ; 
+console.log(movY)
+
+if(rotation > 0.15){rotation = 0.15}
+if(rotation < -0.15){rotation = -0.15}
+
+if(movX > 3){movX = 3}
+if(movX < -3){movX = -3}
+
+if(movY > 3){movY = 3}
+if(movY < -3){movY = -3}
+
+OOB();
 tickCount += 1;
-if (tickCount >= 100 && asteroidList.length < 5){
+if (tickCount >= 100 && asteroidList.length < 8){
     addAsteroid();
 
     tickCount = 0;
@@ -131,7 +142,7 @@ function collisionCheck(){}
 function fireBeam(){}
 
 function addAsteroid(){
-    const rock = PIXI.Sprite.from("assets/ressources/test.png")
+    const rock = PIXI.Sprite.from("assets/ressources/ast.png")
     rock.anchor.set(0.5)
     rock.x = Math.random() * screenX
     rock.y = Math.random() * screenY
@@ -141,3 +152,4 @@ function addAsteroid(){
     asteroidList.push(rock)
     app.stage.addChild(rock)
 }
+
