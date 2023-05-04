@@ -41,7 +41,7 @@ app.renderer.render(app.stage)
 sprite_test.x += movX 
 sprite_test.y += movY
 sprite_test.rotation += rotation
-
+sprite_test.tint = 0xFFFFFF
 console.log(movY)
 
 if(rotation > 0.15){rotation = 0.15}
@@ -82,6 +82,22 @@ for(let i = 0; i<asteroidList.length ; i++){
 
 }
 //console.log(asteroidList)
+for(let i = 0; i<asteroidList.length ; i++){
+    const selectAsteroid = asteroidList[i]
+    const astX = selectAsteroid.x 
+    const asty = selectAsteroid.y
+
+    if(Math.abs (selectAsteroid.x - sprite_test.x )<= 24 && Math.abs (selectAsteroid.y - sprite_test.y )<= 24 ){
+        console.log(" --- COLLISSION --- ")
+        sprite_test.tint = 0xFF0000  // RGB --> R--
+    }
+
+
+}
+
+
+
+
 }
 
 
@@ -121,21 +137,6 @@ function OOB(){ //Out of Bound
     }
 }
 
-function SL(){ // Speed Limiter ...not wokring
-    if (movX >= 3){
-            movX = 3
-    }
-    if (movX <= -3){
-        movX = -3
-    }
-
-    if (movY >= 3){
-        movY = 3
-    }
-    if (movY <= -3){
-        movY= -3
-    }
-}
 
 function collisionCheck(){}
 
