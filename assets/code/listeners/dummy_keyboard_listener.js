@@ -17,4 +17,8 @@ if(clavier.key == "ArrowRight"){
     //alert("ArrowDown")
     moveRight()
 }
+if(clavier.key == " "){
+    //alert("ArrowDown")
+    fireBeam()
+}
 })

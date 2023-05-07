@@ -16,7 +16,6 @@ let movY = 0
 let asteroidList = []
 
 //Var for fire projectile
-let fire
 let fireList = []
 
 //Var for ticker
@@ -46,13 +45,13 @@ console.log(movY)
 
 if(rotation > 0.15){rotation = 0.15}
 if(rotation < -0.15){rotation = -0.15}
-
+/* Not working like intended...
 if(movX > 3){movX = 3}
 if(movX < -3){movX = -3}
 
 if(movY > 3){movY = 3}
 if(movY < -3){movY = -3}
-
+*/
 OOB();
 tickCount += 1;
 if (tickCount >= 100 && asteroidList.length < 8){
@@ -81,6 +80,13 @@ for(let i = 0; i<asteroidList.length ; i++){
     }
 
 }
+
+for(let z = 0;z<fireList.length; z++){
+    const selectBeam = fireList[z]
+    selectBeam.x += selectBeam.speed*Math.sin(selectBeam.direction)
+    selectBeam.y += selectBeam.speed*Math.cos(selectBeam.direction)
+}
+
 //console.log(asteroidList)
 for(let i = 0; i<asteroidList.length ; i++){
     const selectAsteroid = asteroidList[i]
@@ -140,7 +146,16 @@ function OOB(){ //Out of Bound
 
 function collisionCheck(){}
 
-function fireBeam(){}
+function fireBeam(){
+    const pew = PIXI.Sprite.from("assets/ressources/beam.png")
+    pew.anchor.set(0.5)
+    pew.x = sprite_test.x
+    pew.y = sprite_test.y
+    pew.rotation = sprite_test.rotation
+    pew.speed = 0.05
+    fireList.push(pew)
+    app.stage.addChild(pew)
+}
 
 function addAsteroid(){
     const rock = PIXI.Sprite.from("assets/ressources/ast.png")
