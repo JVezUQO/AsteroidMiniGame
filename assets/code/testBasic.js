@@ -35,7 +35,7 @@ sprite_test.position.y = coordy
 // --- Main program --- //
 
 function update(delta) {
-//console.log(rotation, movX, movY, tickCount)
+console.log(movX+movY, movX, movY)
 app.renderer.render(app.stage)
 sprite_test.x += movX 
 sprite_test.y += movY
@@ -83,8 +83,8 @@ for(let i = 0; i<asteroidList.length ; i++){
 
 for(let z = 0;z<fireList.length; z++){
     const selectBeam = fireList[z]
-    selectBeam.x += selectBeam.speed*Math.sin(selectBeam.direction)
-    selectBeam.y += selectBeam.speed*Math.cos(selectBeam.direction)
+    selectBeam.x += selectBeam.speed*Math.sin(selectBeam.rotation)
+    selectBeam.y -= selectBeam.speed*Math.cos(selectBeam.rotation)
 }
 
 //console.log(asteroidList)
@@ -111,13 +111,17 @@ sprite_test.pivot.x = 16
 sprite_test.pivot.y = 16
 
 function moveUp(){
-    movY -= Math.cos(sprite_test.rotation);
-    movX += Math.sin(sprite_test.rotation);
+    if(Math.abs(movX)+Math.abs(movY) <= (3)){
+        movY -= Math.cos(sprite_test.rotation);
+        movX += Math.sin(sprite_test.rotation);  
+    }
 }
 
 function moveDown(){
-    movY += Math.cos(sprite_test.rotation);
-    movX -= Math.sin(sprite_test.rotation);
+    if(Math.abs(movX)+Math.abs(movY) <= (3)){
+        movY += Math.cos(sprite_test.rotation);
+        movX -= Math.sin(sprite_test.rotation);
+    }
 }
 
 function moveLeft(){
@@ -152,7 +156,7 @@ function fireBeam(){
     pew.x = sprite_test.x
     pew.y = sprite_test.y
     pew.rotation = sprite_test.rotation
-    pew.speed = 0.05
+    pew.speed = 5
     fireList.push(pew)
     app.stage.addChild(pew)
 }
