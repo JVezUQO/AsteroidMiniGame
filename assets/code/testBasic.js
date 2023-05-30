@@ -1,9 +1,12 @@
+//  Jean Vezina @2023
+//
 // --- SETUP --- //
 
 //Create a Pixi Application
 let screenX = 764
 let screenY = 512
-const app = new PIXI.Application({width: screenX, height: screenY});
+let border = 64
+const app = new PIXI.Application({width: screenX, height: screenY+border});
 
 //Var for player
 let coordx = screenX/2
@@ -11,6 +14,22 @@ let coordy = screenY/2
 let rotation = 0
 let movX = 0
 let movY = 0
+let score = 0
+let lives = 3
+let cooldownDelay = 0
+let cooldownMax = 10
+//Var for line
+let linePoY = screenY+1
+let line = new PIXI.Graphics()
+
+//Var for score   //need to add updater
+let scoreWrite = new PIXI.Text("Score:"+ cooldownDelay, { 
+    fill: "#FFFFFF",
+    fontSize: 14,
+    antialias: false,
+}
+)
+
 
 //Var for asteroids
 let asteroidList = []
@@ -27,32 +46,42 @@ ticker.start();
 //Add the canvas that Pixi automatically created for you to the HTML document and create and append a test unit name sprite_test
 document.body.appendChild(app.view);
 const sprite_test = PIXI.Sprite.from("assets/ressources/player.png")
-app.stage.addChild(sprite_test);
+app.stage.addChild(sprite_test)
+app.stage.addChild(line)
 sprite_test.position.x = coordx
 sprite_test.position.y = coordy
-
+line.lineStyle(2, 0xFFFFFF, 1)
+line.moveTo(1,linePoY)
+line.lineTo(screenX,linePoY)
+line.endFill();
+app.stage.addChild(scoreWrite);
+scoreWrite.x = screenX/10
+scoreWrite.y = screenY+(border/2)
 
 // --- Main program --- //
 
 function update(delta) {
-console.log(movX+movY, movX, movY)
 app.renderer.render(app.stage)
 sprite_test.x += movX 
 sprite_test.y += movY
 sprite_test.rotation += rotation
 sprite_test.tint = 0xFFFFFF
-console.log(movY)
 
 if(rotation > 0.15){rotation = 0.15}
 if(rotation < -0.15){rotation = -0.15}
-/* Not working like intended...
-if(movX > 3){movX = 3}
-if(movX < -3){movX = -3}
 
-if(movY > 3){movY = 3}
-if(movY < -3){movY = -3}
-*/
+if(movX > 2){movX = 2}
+if(movY > 2){movY = 2}
+
+if(movX < -2){movX = -2}
+if(movY < -2){movY = -2}
+
+
+
 OOB();
+
+if (cooldownDelay < cooldownMax){cooldownDelay+= 1}
+
 tickCount += 1;
 if (tickCount >= 100 && asteroidList.length < 8){
     addAsteroid();
@@ -85,43 +114,59 @@ for(let z = 0;z<fireList.length; z++){
     const selectBeam = fireList[z]
     selectBeam.x += selectBeam.speed*Math.sin(selectBeam.rotation)
     selectBeam.y -= selectBeam.speed*Math.cos(selectBeam.rotation)
+
+    if (selectBeam.x > screenX+10 || selectBeam.y > screenY+10+border || selectBeam.x < -10 || selectBeam.y < -10){
+        fireList.splice(z,1)
+    }
 }
 
-//console.log(asteroidList)
 for(let i = 0; i<asteroidList.length ; i++){
     const selectAsteroid = asteroidList[i]
     const astX = selectAsteroid.x 
     const asty = selectAsteroid.y
 
+
+    for(let b = 0;b<fireList.length ;b++){
+        const checkBeam = fireList[b]
+        
+        if (Math.abs(selectAsteroid.x - checkBeam.x )<=10 && Math.abs(selectAsteroid.y - checkBeam.y )<=10){
+            fireList.splice(b,1)
+            asteroidList.splice(i,1)
+    
+    }
+    
+    
+    
+    
     if(Math.abs (selectAsteroid.x - sprite_test.x )<= 24 && Math.abs (selectAsteroid.y - sprite_test.y )<= 24 ){
-        console.log(" --- COLLISSION --- ")
+        //console.log(" --- COLLISSION --- ")
         sprite_test.tint = 0xFF0000  // RGB --> R--
     }
 
+}
 
 }
 
-
-
-
 }
-
 
 sprite_test.pivot.x = 16
 sprite_test.pivot.y = 16
 
+
 function moveUp(){
-    if(Math.abs(movX)+Math.abs(movY) <= (3)){
+    //if(Math.abs(movX)+Math.abs(movY) <= (3) )
+    //{
         movY -= Math.cos(sprite_test.rotation);
         movX += Math.sin(sprite_test.rotation);  
-    }
+    //}
 }
 
 function moveDown(){
-    if(Math.abs(movX)+Math.abs(movY) <= (3)){
+    //if(Math.abs(movX)+Math.abs(movY) <= (3))
+    //{
         movY += Math.cos(sprite_test.rotation);
         movX -= Math.sin(sprite_test.rotation);
-    }
+    //}
 }
 
 function moveLeft(){
@@ -151,6 +196,7 @@ function OOB(){ //Out of Bound
 function collisionCheck(){}
 
 function fireBeam(){
+if (cooldownDelay == cooldownMax){
     const pew = PIXI.Sprite.from("assets/ressources/beam.png")
     pew.anchor.set(0.5)
     pew.x = sprite_test.x
@@ -159,6 +205,8 @@ function fireBeam(){
     pew.speed = 5
     fireList.push(pew)
     app.stage.addChild(pew)
+    cooldownDelay = 0
+}
 }
 
 function addAsteroid(){
