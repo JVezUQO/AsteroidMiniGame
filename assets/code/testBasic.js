@@ -23,16 +23,24 @@ let linePoY = screenY+1
 let line = new PIXI.Graphics()
 
 //Var for score   //need to add updater
-let scoreWrite = new PIXI.Text("Score:"+ cooldownDelay, { 
+let scoreWrite = new PIXI.Text("", { 
     fill: "#FFFFFF",
-    fontSize: 14,
-    antialias: false,
+    fontSize: 24,
+    fontFamily : "Pixel",
+    antiAlias : false
 }
 )
+//LocalStorage get Highscore
+
+var bestScore = localStorage.getItem("BestScore")
+
+if (bestScore == null){bestScore = 0; localStorage.setItem("BestScore", 0)}
+
 
 
 //Var for asteroids
 let asteroidList = []
+let speedMulti = 1
 
 //Var for fire projectile
 let fireList = []
@@ -67,9 +75,12 @@ sprite_test.y += movY
 sprite_test.rotation += rotation
 sprite_test.tint = 0xFFFFFF
 
+scoreWrite.text = "Score : "+score +"                                                                                  Life :"+lives
+
 if(rotation > 0.15){rotation = 0.15}
 if(rotation < -0.15){rotation = -0.15}
 
+// Need to fix
 if(movX > 2){movX = 2}
 if(movY > 2){movY = 2}
 
@@ -120,6 +131,8 @@ for(let z = 0;z<fireList.length; z++){
     }
 }
 
+
+// Asteroid collision check with beam
 for(let i = 0; i<asteroidList.length ; i++){
     const selectAsteroid = asteroidList[i]
     const astX = selectAsteroid.x 
@@ -130,17 +143,32 @@ for(let i = 0; i<asteroidList.length ; i++){
         const checkBeam = fireList[b]
         
         if (Math.abs(selectAsteroid.x - checkBeam.x )<=10 && Math.abs(selectAsteroid.y - checkBeam.y )<=10){
+            checkBeam.height = 0
+            selectAsteroid.height = 0
+            score += 50 
             fireList.splice(b,1)
             asteroidList.splice(i,1)
     
     }
+}
+    
+    for(let u = 0; u<asteroidList.length ; u++){
+        const colisionAsteroid = asteroidList[u]
+        const astX = colisionAsteroid.x 
+        const asty = colisionAsteroid.y
     
     
     
-    
-    if(Math.abs (selectAsteroid.x - sprite_test.x )<= 24 && Math.abs (selectAsteroid.y - sprite_test.y )<= 24 ){
+    if(Math.abs (colisionAsteroid.x - sprite_test.x )<= 24 && Math.abs (colisionAsteroid.y - sprite_test.y )<= 24 ){
         //console.log(" --- COLLISSION --- ")
         sprite_test.tint = 0xFF0000  // RGB --> R--
+        if (lives > 0){
+            colisionAsteroid.height = 0
+            colisionAsteroid.x = 5000
+            asteroidList.splice(u,0)
+            lives--
+        }
+        else(alert("Gameover your score was "+ score))
     }
 
 }
@@ -192,9 +220,9 @@ function OOB(){ //Out of Bound
     }
 }
 
-
-function collisionCheck(){}
-
+/*
+Create a projectile after a timer
+*/
 function fireBeam(){
 if (cooldownDelay == cooldownMax){
     const pew = PIXI.Sprite.from("assets/ressources/beam.png")
@@ -209,6 +237,9 @@ if (cooldownDelay == cooldownMax){
 }
 }
 
+/*
+Add an asteroid
+*/
 function addAsteroid(){
     const rock = PIXI.Sprite.from("assets/ressources/ast.png")
     rock.anchor.set(0.5)
